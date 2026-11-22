@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HyperDroid V2</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#101b35,#243c65);color:white;height:100vh;overflow:hidden}
+.desktop{height:100vh;padding:20px;background:radial-gradient(circle at 70% 30%,#345b8b,#10172b 70%)}
+.logo{font-size:25px;font-weight:bold}
+.subtitle{color:#b8cce8;margin-top:5px}
+.icons{display:flex;gap:25px;margin-top:45px;flex-wrap:wrap}
+.app{width:85px;text-align:center;cursor:pointer}
+.app span{font-size:38px;display:block;margin-bottom:8px}
+.taskbar{position:absolute;bottom:0;left:0;width:100%;height:58px;background:#101827eF;display:flex;align-items:center;justify-content:center;gap:18px}
+.taskbar button,.window button{background:#29466c;color:white;border:0;border-radius:8px;padding:10px;cursor:pointer}
+.window{position:absolute;top:18%;left:12%;width:min(500px,85vw);height:310px;background:#192b45;border:1px solid #6385b3;border-radius:13px;box-shadow:0 15px 40px #0009;overflow:hidden;resize:both;min-width:220px;min-height:150px}
+.titlebar{height:43px;background:#29466c;display:flex;align-items:center;justify-content:space-between;padding:0 12px;cursor:move}
+.content{padding:18px}
+.hidden{display:none}
+input{padding:10px;border-radius:7px;border:0;width:100%;margin:8px 0}
+</style>
+</head>
+<body>
+<div class="desktop">
+  <div class="logo">🖥️ HyperDroid V2</div>
+  <div class="subtitle">Tu escritorio Android</div>
+  <div class="icons">
+    <div class="app" onclick="openWindow('pc')"><span>💻</span>Mi PC</div>
+    <div class="app" onclick="openWindow('games')"><span>🎮</span>Juegos</div>
+    <div class="app" onclick="openWindow('browser')"><span>🌐</span>Navegador</div>
+    <div class="app" onclick="openWindow('about')"><span>⚙️</span>Ajustes</div>
+  </div>
+</div>
+<div id="pc" class="window hidden">
+  <div class="titlebar" onmousedown="drag(event,'pc')"><b>💻 Mi PC</b><button onclick="closeWindow('pc')">✕</button></div>
+  <div class="content">Bienvenido a HyperDroid V2.<p>Tu escritorio está listo.</p></div>
+</div>
+<div id="games" class="window hidden">
+  <div class="titlebar" onmousedown="drag(event,'games')"><b>🎮 Biblioteca de juegos</b><button onclick="closeWindow('games')">✕</button></div>
+  <div class="content">Tus juegos aparecerán aquí.<p>En una siguiente etapa añadiremos accesos a las aplicaciones instaladas.</p></div>
+</div>
+<div id="browser" class="window hidden">
+  <div class="titlebar" onmousedown="drag(event,'browser')"><b>🌐 Navegador</b><button onclick="closeWindow('browser')">✕</button></div>
+  <div class="content">Escribe una dirección web:
+  <input id="url" placeholder="https://example.com">
+  <button onclick="go()">Abrir página</button></div>
+</div>
+<div id="about" class="window hidden">
+  <div class="titlebar" onmousedown="drag(event,'about')"><b>⚙️ Ajustes</b><button onclick="closeWindow('about')">✕</button></div>
+  <div class="content">HyperDroid V2<br>Versión 2.0</div>
+</div>
+<div class="taskbar">
+  <button onclick="openWindow('pc')">🖥️</button>
+  <button onclick="openWindow('games')">🎮</button>
+  <button onclick="openWindow('browser')">🌐</button>
+</div>
+<script>
+function openWindow(id){document.getElementById(id).classList.remove('hidden')}
+function closeWindow(id){document.getElementById(id).classList.add('hidden')}
+function go(){let u=document.getElementById('url').value;if(u){if(!/^https?:\/\//i.test(u))u='https://'+u;window.open(u,'_blank')}}
+function drag(e,id){
+ if(e.target.tagName==='BUTTON')return;
+ let w=document.getElementById(id),x=e.clientX-w.offsetLeft,y=e.clientY-w.offsetTop;
+ function move(ev){w.style.left=(ev.clientX-x)+'px';w.style.top=(ev.clientY-y)+'px'}
+ function stop(){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',stop)}
+ document.addEventListener('mousemove',move);document.addEventListener('mouseup',stop)
+}
+</script>
+</body>
+</html>
